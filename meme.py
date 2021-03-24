@@ -11,6 +11,7 @@ current = here.absolute()
 
 def generate_meme(path=None, body=None, author=None):
     """ Generate a meme given an path and a quote """
+    
     img = None
     quote = None
 
@@ -37,13 +38,13 @@ def generate_meme(path=None, body=None, author=None):
     else:
         if author is None:
             raise Exception('Author Required if Body is Used')
-        quote = QuoteModel(body, author)
+        quote = QuoteModel.QuoteModel(body, author)
 
-    meme = MemeEngine()
+    meme = MemeEngine('./tmp/static_imgs/')
     path = meme.make_meme(img, quote.body, quote.author)
     return path
 
-
+  
 if __name__ == "__main__":
     cli_parser = argparse.ArgumentParser(description='Generate Meme')
     cli_parser.add_argument('--path', type=str, default=None,
