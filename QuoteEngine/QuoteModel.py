@@ -7,11 +7,11 @@ Created on Thu Mar  4 22:06:43 2021
 
 class QuoteModel():
     
-    def __init__(self, quote, author):
-        self.quote = quote
+    def __init__(self, body, author):
+        self.body = body
         self.author = author
     
     def __repr__(self):
-        return f'{self.quote} - {self.author}'
+        return f'{self.body} - {self.author}'
     
     

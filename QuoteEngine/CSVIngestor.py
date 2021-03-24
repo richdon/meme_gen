@@ -13,11 +13,14 @@ from .QuoteModel import QuoteModel
 
 
 class CSVIngestor(IngestorInterface):
+    """CSV ingestor strategy object"""
     
     allowed_ext = ['csv']
     
     @classmethod
     def parse(cls, path: str)->List[QuoteModel]:
+        """Parses CSV and returns a list of QuoteModel objects"""
+        
         if not cls.can_ingest:
             raise Exception('Cannot ingest file type') 
        

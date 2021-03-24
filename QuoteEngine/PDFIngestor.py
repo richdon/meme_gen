@@ -13,14 +13,19 @@ from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
 class PDFIngestor(IngestorInterface):
+    """PDF ingestor strategy object"""
+    
     allowed_ext = ['pdf']
     
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
+        """Parses PDF and returns a .txt and
+        then parses the txt to a list of QuoteModel objects"""
+        
         if not cls.can_ingest(path):
             raise Exception('cannot ingest file type')
         
-        tmp = f'./tmp/{random.randint(0,10000)}.txt'
+        tmp = f'./{random.randint(0,10000)}.txt'
         call = subprocess.call(['pdftotext', path, tmp])
         
         file_ref = open(tmp, "r")

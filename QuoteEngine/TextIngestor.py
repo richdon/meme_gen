@@ -10,11 +10,14 @@ from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
 class TextIngestor(IngestorInterface):
+    """txt ingestor strategy object"""
     
-    allowed_ext = ['.txt']
+    allowed_ext = ['txt']
     
     @classmethod
     def parse(cls, path: str)->List[QuoteModel]:
+        """Parses .txt and returns a list of QuoteModel objects"""
+        
         if not cls.can_ingest:
             raise Exception('Cannot ingest file type')
         
@@ -23,8 +26,8 @@ class TextIngestor(IngestorInterface):
         with open(path,'r') as f:
             lines = f.readlines()
             for line in lines:
-                parsed = line.split('-')
-                parsed = [txt.strip() for txt in parsed] 
+                parsed = line.split(' - ')
+                parsed = [txt.strip() for txt in parsed]
                 quote = QuoteModel(parsed[0], parsed[1])
                 quotes.append(quote)
             

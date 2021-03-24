@@ -11,11 +11,14 @@ from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
 class DocxIngestor(IngestorInterface):
+    """DOCX ingestor strategy object"""
     
     allowed_ext = ['docx']
     
     @classmethod
     def parse(cls, path: str)->List[QuoteModel]:
+        """Parses DOCX and returns a list of QuoteModel objects"""
+        
         if not cls.can_ingest:
             raise Exception('Cannot ingest file type')
         
