@@ -3,7 +3,6 @@ import os
 import requests
 from flask import Flask, render_template, request
 
-# @TODO Import your Ingestor and MemeEngine fromn
 from MemeEngine import MemeEngine
 from QuoteEngine import Ingestor
 
@@ -70,7 +69,6 @@ def meme_post():
     tmp_txt = './tmp/quotes/tmp_txt.txt'
     with open(tmp_txt, 'w') as f:
         f.write(f'{body} - {author}')
-
    
     quote = Ingestor.parse(tmp_txt)[0]
     body = quote.body
