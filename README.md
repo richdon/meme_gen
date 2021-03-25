@@ -1,2 +1,3 @@
-# meme_generator
+# Meme Generator
 Udacity project
+
