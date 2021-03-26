@@ -14,7 +14,7 @@ By executing meme.py the user will be to use the Command Line Interface with arg
 If no arguments are given the script will run and generate a random meme from the images and quote files found within the proper directories.
 
 The command line interface requires pdftotext.exe to be installed on the users system, which can be downloaded from https://www.xpdfreader.com/download.html.
-dfvw 
+ 
 ### QuoteEngine Library
 The QuoteEngine consists of a modules used for encapsulating a quote object , and ingesting data from different file types to be encapsulated as a quote object.
 
