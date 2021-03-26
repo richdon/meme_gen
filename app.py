@@ -8,7 +8,7 @@ from QuoteEngine import Ingestor
 
 app = Flask(__name__, template_folder='./templates')
 
-meme = MemeEngine('./tmp/url_imgs')
+meme = MemeEngine('./static/')
 
 
 def setup():
