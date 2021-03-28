@@ -1,58 +1,71 @@
-import os
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 17 21:13:59 2021
+
+@author: richa
+"""
+from PIL import Image, ImageDraw, ImageFont
 import random
-import argparse
-import pathlib
 
-from MemeEngine import MemeEngine
-from QuoteEngine import Ingestor, QuoteModel
 
-here = pathlib.Path('.')
-current = here.absolute()
-
-def generate_meme(path=None, body=None, author=None):
-    """ Generate a meme given an path and a quote """
+class MemeEngine():        
+    """class to build a meme"""
     
-    img = None
-    quote = None
+    def __init__(self, save_path):
+        """Initialize with an output path"""
+        
+        self.save_path = save_path
+        
 
-    if path is None:
-        images = "./_data/photos/"
-        imgs = []
-        for root, dirs, files in os.walk(images):
-            imgs = [os.path.join(root, name) for name in files]
-
-        img = random.choice(imgs)
-    else:
-        img = path[0]
-
-    if body is None:
-        quote_files = ['./_data/DogQuotes/DogQuotesTXT.txt',
-                       './_data/DogQuotes/DogQuotesDOCX.docx',
-                       './_data/DogQuotes/DogQuotesPDF.pdf',
-                       './_data/DogQuotes/DogQuotesCSV.csv']
-        quotes = []
-        for f in quote_files:
-            quotes.extend(Ingestor.parse(f))
-
-        quote = random.choice(quotes)
-    else:
-        if author is None:
-            raise Exception('Author Required if Body is Used')
-        quote = QuoteModel.QuoteModel(body, author)
-
-    meme = MemeEngine('./static/')
-    path = meme.make_meme(img, quote.body, quote.author)
-    return path
-
-  
-if __name__ == "__main__":
-    cli_parser = argparse.ArgumentParser(description='Generate Meme')
-    cli_parser.add_argument('--path', type=str, default=None,
-                        help='file path to image') 
-    cli_parser.add_argument('--body', type=str, default=None,
-                        help='text body for meme') 
-    cli_parser.add_argument('--author', type=str, default=None,
-                        help='text author for meme')
+    def resize(self, path:str, size:int) -> str:
+        """Resize the image in path dependent on width entered
+        in size variable"""
+        
+        try:
+            im = Image.open(path)
+            
+        except FileNotFoundError:  
+            print('The file was not opened')
+        
+        im.thumbnail(size)
+        im.save(f"{self.save_path}/resized.jpg")       
     
-    args = cli_parser.parse_args()
-    print(generate_meme(args.path, args.body, args.author))
+        return f"{self.save_path}/resized.jpg"
+    
+    
+    def write_text(self, path, body, author):
+        """Open the resized image and write text on the image"""
+        
+        tmp = random.randint(2000, 3000)
+        im = Image.open(f"{self.save_path}/resized.jpg")
+        x, y = 10, 10
+        pointsize = 22
+        fillcolor = 'white'
+        shadowcolor = 'black'        
+        font_path = './fonts/impact.ttf'
+        
+        draw = ImageDraw.Draw(im)
+        font = ImageFont.truetype(font_path, pointsize)
+        text = body +' - ' + author
+        
+        # thicker border
+        draw.text((x-1, y-1), text, font=font, fill=shadowcolor)
+        draw.text((x+1, y-1), text, font=font, fill=shadowcolor)
+        draw.text((x-1, y+1), text, font=font, fill=shadowcolor)
+        draw.text((x+1, y+1), text, font=font, fill=shadowcolor)
+        
+        draw.text((x, y), text, font = font, fill = fillcolor, align='center')
+        im.save(f"{self.save_path}/{tmp}.jpg")
+        
+        return f"{self.save_path}/{tmp}.jpg"
+        
+    
+    def make_meme(self, path, body, author, width = 500):
+        """Build a meme using the helper methods"""
+        
+        height = width
+        size = (width, height)
+        
+        meme_path = self.write_text(self.resize(path, size), body, author)
+        
+        return meme_path
