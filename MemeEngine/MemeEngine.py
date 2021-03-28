@@ -39,13 +39,13 @@ class MemeEngine():
         tmp = random.randint(2000, 3000)
         im = Image.open(f"{self.save_path}/resized.jpg")
         x, y = 10, 10
-        pointsize = 30
+        pointsize = 22
         fillcolor = 'white'
         shadowcolor = 'black'        
-        
+        font_path = './fonts/impact.ttf'
         
         draw = ImageDraw.Draw(im)
-        font = ImageFont.truetype("impact.ttf", pointsize)
+        font = ImageFont.truetype(font_path, pointsize)
         text = body +' - ' + author
         
         # thicker border
