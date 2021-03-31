@@ -56,20 +56,20 @@ def meme_form():
 @app.route('/create', methods=['POST'])
 def meme_post():
     """ Create a user defined meme """
-   
+
     img = request.form['image_url']
     body = request.form['body']
     author = request.form['author']
 
-    r = requests.get(img)
-    tmp_img = './tmp/url_imgs/tmp_img.jpg'
+    r = requests.get(img, allow_redirects=True)
+    tmp_img = './static/tmp_img.png'
     with open(tmp_img, 'wb') as f:
        f.write(r.content)
 
-    tmp_txt = './tmp/quotes/tmp_txt.txt'
+    tmp_txt = './static/tmp_txt.txt'
     with open(tmp_txt, 'w') as f:
         f.write(f'{body} - {author}')
-   
+
     quote = Ingestor.parse(tmp_txt)[0]
     body = quote.body
     author = quote.author
@@ -81,6 +81,9 @@ def meme_post():
 
     return render_template('meme.html', path=path)
 
+@app.errorhandler(500)
+def error500(error):
+    return '<h1> Error 500: You entered a bad URL for the image location!'
 
 if __name__ == "__main__":
     app.run()
