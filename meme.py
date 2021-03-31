@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Mar 16 12:54:00 2021.
+
+@author: richa
+"""
 import os
 import random
 import argparse
@@ -7,8 +13,7 @@ from QuoteEngine import Ingestor, QuoteModel
 
 
 def generate_meme(path=None, body=None, author=None):
-    """ Generate a meme given an path and a quote """
-    
+    """Generate a meme given an path and a quote."""
     img = None
     quote = None
 
@@ -41,15 +46,15 @@ def generate_meme(path=None, body=None, author=None):
     path = meme.make_meme(img, quote.body, quote.author)
     return path
 
-  
+
 if __name__ == "__main__":
     cli_parser = argparse.ArgumentParser(description='Generate Meme')
     cli_parser.add_argument('--path', type=str, default=None,
-                        help='file path to image') 
+                            help='file path to image')
     cli_parser.add_argument('--body', type=str, default=None,
-                        help='text body for meme') 
+                            help='text body for meme')
     cli_parser.add_argument('--author', type=str, default=None,
-                        help='text author for meme')
-    
+                            help='text author for meme')
+
     args = cli_parser.parse_args()
     print(generate_meme(args.path, args.body, args.author))

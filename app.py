@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Mar  4 23:27:33 2021.
+
+@author: richa
+"""
 import random
 import os
 import requests
@@ -12,24 +18,23 @@ meme = MemeEngine('./static/')
 
 
 def setup():
-    """ Load all resources """
-
+    """Load all resources."""
     quote_files = ['./_data/DogQuotes/DogQuotesTXT.txt',
                    './_data/DogQuotes/DogQuotesDOCX.docx',
                    './_data/DogQuotes/DogQuotesPDF.pdf',
                    './_data/DogQuotes/DogQuotesCSV.csv']
 
     quotes = []
-    
+
     for file in quote_files:
         quotes.extend(Ingestor.parse(file))
-    
+
     images_path = "./_data/photos/"
 
     imgs = []
     for root, dirs, files in os.walk(images_path):
         imgs = [os.path.join(root, name) for name in files]
-    
+
     return quotes, imgs
 
 
@@ -38,8 +43,7 @@ quotes, imgs = setup()
 
 @app.route('/')
 def meme_rand():
-    """ Generate a random meme """
-
+    """Generate a random meme."""
     img = random.choice(imgs)
     quote = random.choice(quotes)
     path = meme.make_meme(img, quote.body, quote.author)
@@ -48,15 +52,13 @@ def meme_rand():
 
 @app.route('/create', methods=['GET'])
 def meme_form():
-    """ User input for meme information """
-    
+    """User input for meme information."""
     return render_template('meme_form.html')
 
 
 @app.route('/create', methods=['POST'])
 def meme_post():
-    """ Create a user defined meme """
-
+    """Create a user defined meme."""
     img = request.form['image_url']
     body = request.form['body']
     author = request.form['author']
@@ -64,7 +66,7 @@ def meme_post():
     r = requests.get(img, allow_redirects=True)
     tmp_img = './static/tmp_img.png'
     with open(tmp_img, 'wb') as f:
-       f.write(r.content)
+        f.write(r.content)
 
     tmp_txt = './static/tmp_txt.txt'
     with open(tmp_txt, 'w') as f:
@@ -81,9 +83,12 @@ def meme_post():
 
     return render_template('meme.html', path=path)
 
+
 @app.errorhandler(500)
 def error500(error):
-    return '<h1> Error 500: You entered a bad URL for the image location!'
+    """Create a custom error message."""
+    return '<h1> Error 500 \nYou entered a bad URL for the image location!'
+
 
 if __name__ == "__main__":
     app.run()
