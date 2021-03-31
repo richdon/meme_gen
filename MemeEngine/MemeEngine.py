@@ -6,7 +6,7 @@ Created on Wed Mar 17 21:13:59 2021
 """
 from PIL import Image, ImageDraw, ImageFont
 import random
-
+import textwrap
 
 class MemeEngine():        
     """class to build a meme"""
@@ -28,36 +28,38 @@ class MemeEngine():
             print('The file was not opened')
         
         im.thumbnail(size)
-        im.save(f"{self.save_path}/resized.jpg")       
+        im.save(f"{self.save_path}/resized.png")       
     
-        return f"{self.save_path}/resized.jpg"
+        return f"{self.save_path}/resized.png"
     
     
     def write_text(self, path, body, author):
         """Open the resized image and write text on the image"""
         
         tmp = random.randint(2000, 3000)
-        im = Image.open(f"{self.save_path}/resized.jpg")
+        im = Image.open(f"{self.save_path}/resized.png")
         x, y = 10, 10
         pointsize = 22
         fillcolor = 'white'
-        shadowcolor = 'black'        
         font_path = './fonts/impact.ttf'
         
         draw = ImageDraw.Draw(im)
         font = ImageFont.truetype(font_path, pointsize)
-        text = body +' - ' + author
+        text = body + ' - ' + author
+ 
+        # wrap text    
+        wrapper = textwrap.TextWrapper(width=50)
+        word_lst = wrapper.wrap(text = text)
+        text_new = ''
+        for word in word_lst[:-1]:
+            text_new = text_new + word + '\n'
+        text_new += word_lst[-1]
+                           
+        draw.text((x, y), text_new, font = font, fill = fillcolor, 
+                  align='center', stroke_width=1, stroke_fill='black')
+        im.save(f"{self.save_path}/{tmp}.png")
         
-        # thicker border
-        draw.text((x-1, y-1), text, font=font, fill=shadowcolor)
-        draw.text((x+1, y-1), text, font=font, fill=shadowcolor)
-        draw.text((x-1, y+1), text, font=font, fill=shadowcolor)
-        draw.text((x+1, y+1), text, font=font, fill=shadowcolor)
-        
-        draw.text((x, y), text, font = font, fill = fillcolor, align='center')
-        im.save(f"{self.save_path}/{tmp}.jpg")
-        
-        return f"{self.save_path}/{tmp}.jpg"
+        return f"{self.save_path}/{tmp}.png"
         
     
     def make_meme(self, path, body, author, width = 500):
